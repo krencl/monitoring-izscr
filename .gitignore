@@ -1,0 +1,4 @@
+.idea
+app/config.json
+app/vendor
+app/install/schema.sql

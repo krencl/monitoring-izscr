@@ -1,0 +1,15 @@
+{
+	"title": "GRH IZSCR monitoring",
+	"email": {
+		"imapServer": "imap.gmail.com",
+		"user": "",
+		"pass": ""
+	},
+	"db": {
+		"host": "mariadb",
+		"port": 3306,
+		"user": "root",
+		"pass": "dhja44dotrs8sa",
+		"database": "monitoring"
+	}
+}

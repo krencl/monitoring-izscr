@@ -1,0 +1,28 @@
+{
+	"name": "krencl/monitoring-grh-izscr",
+	"description": "description",
+	"minimum-stability": "stable",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "krencl",
+			"email": "krencl@gmail.com"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "src/"
+		}
+	},
+	"scripts": {
+		"post-install-cmd": "php install/install-check.php"
+	},
+	"require": {
+		"ext-mysqli": "*",
+		"ext-imap": "*",
+		"twig/twig": "3.5.1",
+		"symfony/error-handler": "6.2.7",
+		"symfony/http-foundation": "6.2.7",
+		"dibi/dibi": "4.2.7"
+	}
+}

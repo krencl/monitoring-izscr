@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./app:/www
+    environment:
+      TZ: Europe/Prague
+    networks:
+      - net
+  php:
+    build: ./docker/php
+    restart: unless-stopped
+    volumes:
+      - ./app:/www
+    environment:
+      TZ: Europe/Prague
+    networks:
+      - net
+  mariadb:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      TZ: Europe/Prague
+      MYSQL_ROOT_PASSWORD: dhja44dotrs8sa
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - net
+volumes:
+  mariadb_data:
+networks:
+  net:
