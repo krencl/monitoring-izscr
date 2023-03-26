@@ -1,7 +1,8 @@
 {
 	"title": "GRH IZSCR monitoring",
 	"email": {
-		"imapServer": "imap.gmail.com",
+		"host": "imap.seznam.cz",
+		"port": 993,
 		"user": "",
 		"pass": ""
 	},

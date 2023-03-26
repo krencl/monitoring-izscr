@@ -15,7 +15,8 @@
 		}
 	},
 	"scripts": {
-		"post-install-cmd": "php install/install-check.php"
+		"post-install-cmd": "php install/install-check.php",
+		"drop-database": "php install/drop-database.php"
 	},
 	"require": {
 		"ext-mysqli": "*",
@@ -23,6 +24,7 @@
 		"twig/twig": "3.5.1",
 		"symfony/error-handler": "6.2.7",
 		"symfony/http-foundation": "6.2.7",
-		"dibi/dibi": "4.2.7"
+		"dibi/dibi": "4.2.7",
+		"php-imap/php-imap": "5.0.1"
 	}
 }

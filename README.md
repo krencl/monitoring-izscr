@@ -42,7 +42,9 @@ chmod +x *.sh
 
 # Spuštění aplikace
 
-Aplikace se spouští pomocí `start.sh` v adresáři aplikace. Případné vypnutí je pomocí  `stop.sh`.
+Aplikace se spouští pomocí `start.sh` v adresáři aplikace.
+
+*První spuštění chvíli potrvá (v závislosti na rychlosti internetu), protože se musí stáhnout všechny potřebné součásti.*
 
 Aplikace pak bude běžet v prohlížeči na adrese:
 http://localhost:8080
@@ -50,6 +52,8 @@ http://localhost:8080
 Pokud byla aplikace už jednou spuštněna a docker je nastaven po spuštění systému, tak se automaticky zapne s přihlášením uživatele.
 
 Na plochu Ubuntu lze přidat zástupce jednorázovým spuštěním skriptu `create-shortcut.sh`.
+
+Případné vypnutí je pomocí  `stop.sh`.
 
 # Konfigurace aplikace
 

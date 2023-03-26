@@ -1,4 +1,6 @@
-.idea
-app/config.json
-app/vendor
-app/install/schema.sql
+/.idea
+/app/config.json
+/app/vendor
+/app/install/schema.sql
+/app/tmp/*
+!.gitkeep
