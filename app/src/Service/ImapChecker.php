@@ -68,7 +68,7 @@ final class ImapChecker
 			DateTime::createFromFormat(DateTimeInterface::W3C, $mail->date),
 			$mail->subject,
 			$mail->textPlain,
-			$mail->textHtml
+			$mail->textHtml,
 		);
 	}
 
