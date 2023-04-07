@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\DTO\Email;
 use DateTime;
-
 use DateTimeInterface;
 use PhpImap\Exceptions\ConnectionException;
 use PhpImap\Mailbox;
@@ -42,7 +41,7 @@ final class ImapChecker
 	}
 
 	/** @return array<Email> */
-	public function getEmails(DateTime $since): array
+	public function getEmails(DateTimeInterface $since): array
 	{
 		$search = $this->mailbox->searchMailbox(sprintf('SINCE "%s"', $since->format('Y-m-d')));
 		if (empty($search)) {
@@ -60,13 +59,16 @@ final class ImapChecker
 	private function fetchEmail(int $id): Email|null
 	{
 		$mail = $this->mailbox->getMail($id, false);
+
 		if (!str_contains($mail->headersRaw, self::CHECK_DOMAIN)) {
 			return null;
 		}
 
 		return new Email(
+			$mail->messageId ?: $mail->subject . ' ' . $mail->date,
 			DateTime::createFromFormat(DateTimeInterface::W3C, $mail->date),
 			$mail->subject,
+			$mail->headersRaw,
 			$mail->textPlain,
 			$mail->textHtml,
 		);

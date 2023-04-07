@@ -2,42 +2,33 @@
 
 namespace App\Controller;
 
-use App\DTO\Email;
-use App\DTO\Event;
 use App\Service\Config;
-use App\Service\Db;
-use App\Service\EmailParser;
-use App\Service\ImapChecker;
-use DateTime;
+use App\Service\EventsResolver;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EventsController extends AbstractController implements ControllerInterface
 {
+	private const DEFAULT_LIMIT = 10;
+	private const DEFAULT_OFFSET = 0;
+
 	public function __construct(
-		private readonly ImapChecker $imapChecker,
-		private readonly EmailParser $emailParser,
+		private readonly EventsResolver $eventsResolver,
 		Config $config,
-		Db $db
 	) {
-		parent::__construct($config, $db);
+		parent::__construct($config);
 	}
 
 	public function getResponse(Request $request): Response
 	{
-		$lastDate = $this->db->getDibiConnection()->select('MAX(created_at)')
-			->from('event')
-			->fetchSingle();
+		$limit = (int) $request->query->get('limit', self::DEFAULT_LIMIT);
+		$offset = (int) $request->query->get('offset', self::DEFAULT_OFFSET);
 
-		$dateSince = $lastDate ?? new DateTime('2023-03-01 00:00:00');
+		$this->eventsResolver->updateNewEvents();
 
-		//$imapEmails = $this->imapChecker->getEmails($dateSince);
-		$imapEmails = unserialize(file_get_contents(__DIR__ . '/../../tmp/email-mock.tmp'));
+		$events = $this->eventsResolver->getLastEvents($limit, $offset);
 
-		$events = array_map($this->emailParser->parse(...), $imapEmails);
-
-		dump($events);
-		return new JsonResponse();
+		return new JsonResponse($events);
 	}
 }

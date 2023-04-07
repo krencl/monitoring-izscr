@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\DTO\Email;
 use App\DTO\Event;
+use DateTime;
 
 final class EmailParser
 {
@@ -14,14 +15,16 @@ final class EmailParser
 		preg_match('~Blovice.+<b><big>(?<title>[^<]+)</big>~Uis', $html, $title);
 		preg_match('~(?<lat>\d{2}\.\d{4,8}) N, (?<lng>\d{2}\.\d{4,8}) E~', $html, $gps);
 		preg_match('~OZNÁMIL:.+<b>(?<name>[^<]+)</b>.*Telefon:.+<b>(?<phone>[^<]*)</b>~Ui', $html, $reporter);
-		preg_match('~<small>.+Událost.+ (?<id>\d+) - odbavil (?<name>.+) - (?<time>\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{2}:\d{2}).+</small>~Ui', $html, $footer);
+		preg_match('~Událost.+ (?<id>\d+)~Ui', $html, $id);
+		preg_match('~odbavil (?<name>.+) - (?<time>\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{2}:\d{2}).+</small>~Ui', $html, $footer);
 
 		return new Event(
 			id: null,
-			emailDate: $email->date,
+			emailId: $email->id,
+			emailDate: $email->date->format(Event::DateFormat),
 			emailSubject: $email->subject,
-			izscrId: $this->getMatched($footer, 'id'),
-			izscrDate:$this->getMatched($footer, 'time'),
+			izscrId: $this->getMatched($id, 'id'),
+			izscrDate: $this->getDateTime($this->getMatched($footer, 'time')),
 			izscrName: $this->getMatched($footer, 'name'),
 			title: $this->getMatched($title, 'title'),
 			object: $this->matchBig($html, 'OBJEKT'),
@@ -51,6 +54,15 @@ final class EmailParser
 	private function getMatched(array $footer, string $key): string|null
 	{
 		return trim($footer[$key] ?? '') ?: null;
+	}
+
+	private function getDateTime(string|null $value, string $format = 'd.m.Y H:i:s'): string|null
+	{
+		if (!$value) {
+			return null;
+		}
+
+		return DateTime::createFromFormat($format, $value)->format(Event::DateFormat) ?: null;
 	}
 
 	private function matchBig(string $haystack, string $title): string|null

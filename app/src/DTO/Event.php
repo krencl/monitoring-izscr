@@ -7,9 +7,12 @@ use Dibi\Row;
 
 final class Event
 {
+	public const DateFormat = 'j.n.Y H:i:s';
+
 	public function __construct(
 		public readonly int|null $id,
-		public readonly DateTime $emailDate,
+		public readonly string $emailId,
+		public readonly string $emailDate,
 		public readonly string $emailSubject,
 		public readonly string|null $izscrId = null,
 		public readonly string|null $izscrDate = null,
@@ -34,14 +37,44 @@ final class Event
 	) {
 	}
 
+	public function toDbArray(): array
+	{
+		return [
+			'id' => $this->id,
+			'email_id' => $this->emailId,
+			'email_date' => DateTime::createFromFormat(self::DateFormat, $this->emailDate),
+			'email_subject' => $this->emailSubject,
+			'izscr_id' => $this->izscrId,
+			'izscr_date' => $this->izscrDate ? DateTime::createFromFormat(self::DateFormat,$this->izscrDate) : null,
+			'izscr_name' => $this->izscrName,
+			'title' => $this->title,
+			'object' => $this->object,
+			'clarification' => $this->clarification,
+			'description' => $this->description,
+			'vehicles_local' => $this->vehiclesLocal,
+			'vehicles_other' => $this->vehiclesOther,
+			'reporter_name' => $this->reporterName,
+			'reporter_phone' => $this->reporterPhone,
+			'city' => $this->city,
+			'city_part' => $this->cityPart,
+			'street' => $this->street,
+			'region' => $this->region,
+			'zip' => $this->zip,
+			'lat' => $this->lat,
+			'lng' => $this->lng,
+			'created_at' => $this->createdAt ? DateTime::createFromFormat(self::DateFormat,$this->createdAt) : new DateTime(),
+		];
+	}
+
 	public static function fromDibiRow(Row $row): self
 	{
 		return new self(
 			$row->id,
-			$row->email_date,
+			$row->email_id,
+			$row->email_date->format(self::DateFormat),
 			$row->email_subject,
-			$row->icscr_id,
-			$row->izscr_date,
+			$row->izscr_id,
+			$row->izscr_date?->format(self::DateFormat),
 			$row->izscr_name,
 			$row->title,
 			$row->object,
@@ -55,10 +88,11 @@ final class Event
 			$row->city_part,
 			$row->street,
 			$row->region,
+			$row->region,
 			$row->zip,
 			$row->lat,
 			$row->lng,
-			$row->created_at,
+			$row->created_at->format(self::DateFormat),
 		);
 	}
 }

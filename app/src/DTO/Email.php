@@ -2,13 +2,15 @@
 
 namespace App\DTO;
 
-use DateTime;
+use DateTimeInterface;
 
 final class Email
 {
 	public function __construct(
-		public readonly DateTime $date,
+		public readonly string $id,
+		public readonly DateTimeInterface $date,
 		public readonly string $subject,
+		public readonly string $header,
 		public readonly string $plain,
 		public readonly string $html,
 	) {
