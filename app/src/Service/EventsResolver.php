@@ -23,8 +23,6 @@ final class EventsResolver
 
 		$dateSince = $lastDate ?? new DateTime('2023-03-01 00:00:00');
 		$imapEmails = $this->imapChecker->getEmails($dateSince);
-//		file_put_contents(__DIR__ . '/../../tmp/email-mock.tmp', serialize($imapEmails));
-//		$imapEmails = unserialize(file_get_contents(__DIR__ . '/../../tmp/email-mock.tmp'));
 		$events = array_map($this->emailParser->parse(...), $imapEmails);
 		$this->saveEvents(array_reverse($events));
 	}

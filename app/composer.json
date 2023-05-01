@@ -16,7 +16,9 @@
 	},
 	"scripts": {
 		"post-install-cmd": "php install/install-check.php",
-		"drop-database": "php install/drop-database.php"
+		"drop-database": "php install/drop-database.php",
+		"reinstall-database": "php install/drop-database.php && php install/install-check.php",
+		"create-testing-data": "php install/create-testing-data.php"
 	},
 	"require": {
 		"ext-mysqli": "*",
@@ -25,6 +27,7 @@
 		"symfony/error-handler": "6.2.7",
 		"symfony/http-foundation": "6.2.7",
 		"dibi/dibi": "4.2.7",
-		"php-imap/php-imap": "5.0.1"
+		"php-imap/php-imap": "5.0.1",
+		"fakerphp/faker": "^1.21"
 	}
 }

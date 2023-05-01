@@ -2,6 +2,10 @@
 
 namespace App\Service;
 
+use App\DTO\Event;
+use DateTime;
+use Faker\Factory as FakerFactory;
+
 final class Installer
 {
 	public function __construct(
@@ -81,6 +85,42 @@ final class Installer
 
 		$this->printInfo('OK');
 		return true;
+	}
+
+	public function createTestingData(): void
+	{
+		$db = new Db($this->config);
+		$dibi = $db->getDibiConnection();
+
+		$faker = FakerFactory::create();
+		$dibi->insert('event', (new Event(
+			id: null,
+			emailId: $faker->uuid(),
+			emailDate: (new DateTime())->format(Event::DateFormat),
+			emailSubject: 'Event ' . $faker->text(50),
+			izscrId: $faker->numberBetween(10000, 99999),
+			izscrDate: (new DateTime())->format(Event::DateFormat),
+			izscrName: $faker->word() . ' ' . $faker->numberBetween(1, 9),
+			title: $faker->realTextBetween(20, 40),
+			object: $faker->realTextBetween(10, 30),
+			clarification: $faker->realTextBetween(20, 50),
+			description: $faker->realTextBetween(20, 100),
+			vehiclesLocal: $faker->realTextBetween(10, 30) . "\n" . $faker->realTextBetween(10, 30),
+			vehiclesOther: $faker->realTextBetween(10, 30),
+			reporterName: $faker->name(),
+			reporterPhone: $faker->phoneNumber(),
+			city: $faker->city(),
+			cityPart: $faker->streetName(),
+			street: $faker->streetName(),
+			streetNumber: $faker->numberBetween(1, 500),
+			region: $faker->city(),
+			zip: $faker->numberBetween(10000, 60000),
+			lat: $faker->latitude(49, 51),
+			lng: $faker->longitude(13, 18),
+			createdAt: (new DateTime())->format(Event::DateFormat),
+		))->toDbArray())->execute();
+
+		$this->printInfo('Vytvoren event ID ' . $dibi->getInsertId(), false);
 	}
 
 	private function printInfo(string $text, bool $newLine = true): void

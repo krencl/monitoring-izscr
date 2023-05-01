@@ -14,15 +14,7 @@ $installer = new Installer(
 );
 
 if (!$installer->isConfigured()) {
-	if (!$installer->setUpConfigFile(__DIR__ . '/../config.template.json')) {
-		exit(1);
-	}
-}
-if (!$installer->checkEmailConnection()) {
-	exit(1);
-}
-if (!$installer->setUpDatabase(__DIR__ . '/schema.template.sql')) {
 	exit(1);
 }
 
-echo 'Instalace dokoncena' . PHP_EOL;
+$installer->createTestingData();

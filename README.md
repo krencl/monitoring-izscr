@@ -2,6 +2,7 @@
 
 ## Závislosti
 
+- Linux (funguje i na Windows s WSL)
 - Pro běh je potřeba mít nainstalovaný **Docker** (instalace v návodu níže)
 - Pro stáhnutí projektu ideální mít nainstalovaný **GIT** (instalace v návodu níže), není to podmínkou, ale návod s tím počítá 
 
@@ -35,8 +36,8 @@ sudo apt install git
 Stáhnutí aplikace příkazem v terminálu
 
 ```
-git clone XXX
-cd XXX
+git clone https://github.com/krencl/monitoring-izscr.git
+cd monitoring-izscr
 chmod +x *.sh
 ```
 

@@ -1,5 +1,77 @@
 {% extends 'layout.html.twig' %}
 
+{% block scripts %}
+	{{ parent() }}
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/cs.min.js"></script>
+	<script src="https://api.mapy.cz/loader.js"></script>
+	<script>Loader.load()</script>
+	<script src="/public/Event.js"></script>
+	<script src="/public/MapHandler.js"></script>
+	<script src="/public/main.js"></script>
+{% endblock %}
+
 {% block content %}
-	<h1>Hello World!</h1>
+<div id="app" class="mx-5">
+	<div class="row mt-2">
+		<div class="col-12 text-center">
+			<i v-bind:class="statusClass" class="me-2">
+				Poslední aktualizace: <span v-html="statusText"></span>
+			</i>
+			<div class="spinner-border spinner-border-sm text-secondary" role="status" v-bind:class="{invisible: !loading}">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+	</div>
+	<div class="row mt-4">
+		<div class="col-10">
+			<div v-if="!actualEvent">
+				<h2 class="text-secondary" v-if="firstLoad">načítám data...</h2>
+				<h2 class="text-secondary" v-if="!firstLoad">žádný aktuální event</h2>
+				<br>
+			</div>
+			<div v-if="actualEvent">
+				<h2 v-html="actualEvent.title"></h2>
+				<span v-html="actualEvent.eventDate.fromNow()"></span> (<i v-html="actualEvent.eventDateString"></i>)<br>
+			</div>
+			<div class="row mt-3">
+				<div class="col-8">
+					<div class="map-container">
+						<div id="map"></div>
+					</div>
+				</div>
+				<div class="col-4 info" v-if="actualEvent">
+					<span class="h5 text-primary"><strong>GPS:</strong> <span v-html="actualEvent.lat"></span>, <span v-html="actualEvent.lng"></span></span><br>
+					<div class="mt-2"><strong>Adresa:</strong><br><span v-html="actualEvent.addressString"></span></div>
+					<div class="mt-2" v-if="actualEvent.object"><strong>Objekt:</strong><br><span v-html="actualEvent.object"></span></div>
+					<div class="mt-2" v-if="actualEvent.clarification"><strong>Upřesnění:</strong><br><span v-html="actualEvent.clarification"></span></div>
+					<div class="mt-2" v-if="actualEvent.description"><strong>Co se stalo:</strong><br><span v-html="actualEvent.description"></span></div>
+					<div class="mt-2" v-if="actualEvent.vehiclesLocal"><strong>Technika Blovice:</strong><br> <span v-html="actualEvent.vehiclesLocalString"></span></div>
+					<div class="mt-2" v-if="actualEvent.vehiclesOther"><strong>Technika dalších jednotek PO:</strong><br> <span v-html="actualEvent.vehiclesOtherString"></span></div>
+					<div class="mt-2" v-if="actualEvent.reporterName || actualEvent.reporterPhone">
+						<strong>Oznámil:</strong><br>
+						<template v-if="actualEvent.reporterPhone"><span v-html="actualEvent.reporterPhone"></span> <template v-if="actualEvent.reporterName">(<span v-html="actualEvent.reporterName"></span>)</template></template>
+						<template v-if="!actualEvent.reporterPhone"><span v-html="actualEvent.reporterName"></span></template>
+					</div>
+					<div class="mt-2"><strong>Událost:</strong><br> <span v-html="actualEvent.izscrId"></span> - <span v-html="actualEvent.izscrName"></span> - <span v-html="actualEvent.izscrDate"></span></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-2">
+			<div v-if="events.length > 0">
+				<h3>Historie</h3>
+				<div class="list-group">
+					<a href="#" class="list-group-item" v-bind:class="{active: !actualEvent}" v-on:click="selectEvent(null)">
+						<strong>Zrušit výběr</strong>
+					</a>
+					<a href="#" class="list-group-item" v-bind:class="{active: event.id == actualEvent?.id}" v-on:click="selectEvent(event)" v-for="event in events">
+						<strong v-html="event.title"></strong><br>
+						<span v-html="event.eventDateString"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}

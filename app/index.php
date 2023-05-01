@@ -14,7 +14,7 @@ use App\Service\Router;
 use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/init.php';
 
 Debug::enable();
 

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class EventsController extends AbstractController implements ControllerInterface
 {
-	private const DEFAULT_LIMIT = 10;
+	private const DEFAULT_LIMIT = 9;
 	private const DEFAULT_OFFSET = 0;
 
 	public function __construct(

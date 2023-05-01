@@ -15,8 +15,9 @@ final class EmailParser
 		preg_match('~Blovice.+<b><big>(?<title>[^<]+)</big>~Uis', $html, $title);
 		preg_match('~(?<lat>\d{2}\.\d{4,8}) N, (?<lng>\d{2}\.\d{4,8}) E~', $html, $gps);
 		preg_match('~OZNÁMIL:.+<b>(?<name>[^<]+)</b>.*Telefon:.+<b>(?<phone>[^<]*)</b>~Ui', $html, $reporter);
-		preg_match('~Událost.+ (?<id>\d+)~Ui', $html, $id);
+		preg_match('~Událost č\. (?<id>\d+)~i', $html, $id);
 		preg_match('~odbavil (?<name>.+) - (?<time>\d{1,2}\.\d{1,2}\.\d{4} \d{1,2}:\d{2}:\d{2}).+</small>~Ui', $html, $footer);
+
 
 		return new Event(
 			id: null,
