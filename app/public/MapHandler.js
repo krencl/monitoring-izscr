@@ -12,9 +12,13 @@ class MapHandler
 		this.map.addDefaultLayer(SMap.DEF_BASE).enable();
 		this.map.addDefaultControls();
 
-		this.mapMarkerLayer = new SMap.Layer.Marker();
-		this.map.addLayer(this.mapMarkerLayer);
-		this.mapMarkerLayer.enable();
+		this.markerLayer = new SMap.Layer.Marker();
+		this.map.addLayer(this.markerLayer);
+		this.markerLayer.enable();
+
+		this.pathLayer = new SMap.Layer.Geometry();
+		this.map.addLayer(this.pathLayer);
+		this.pathLayer.enable();
 
 		const baseLayer =  new SMap.Layer.Marker();
 		this.map.addLayer(baseLayer);
@@ -36,6 +40,7 @@ class MapHandler
 			this.actualMarker = null;
 			this.map.setCenter(this.defaultCoords, true);
 			this.map.setZoom(this.zoom);
+			this.clearPath();
 			return;
 		}
 
@@ -49,6 +54,7 @@ class MapHandler
 		this.map.setZoom(this.zoom);
 
 		this.actualMarker = marker;
+		this.setPath(this.defaultCoords, marker.getCoords());
 	}
 
 	/** @param markers {MapMarker[]} */
@@ -58,7 +64,7 @@ class MapHandler
 			usedIds.push(marker.id);
 			if (this.markers[marker.id] === undefined) {
 				this.markers[marker.id] = this.createMarker(marker);
-				this.mapMarkerLayer.addMarker(this.markers[marker.id]);
+				this.markerLayer.addMarker(this.markers[marker.id]);
 			}
 		}
 	}
@@ -67,6 +73,21 @@ class MapHandler
 	createMarker(marker) {
 		const coords = SMap.Coords.fromWGS84(marker.lng, marker.lat);
 		return new SMap.Marker(coords, marker.id, {url: this.getIconUrl('marker')});
+	}
+
+	setPath(fromCoords, toCoords) {
+		this.clearPath();
+
+		const route = new SMap.Route([fromCoords, toCoords], () => {
+			const geometry = new SMap.Geometry(SMap.GEOMETRY_POLYLINE, null, route.getResults().geometry, {
+				color: '#B2452C'
+			});
+			this.pathLayer.addGeometry(geometry);
+		});
+	}
+
+	clearPath() {
+		this.pathLayer.removeAll();
 	}
 
 	getIconUrl(type) {
