@@ -8,20 +8,8 @@
 
 ## Instalace dockeru
 
-Stáhnout DEB package z oficiálních stránek:
-https://docs.docker.com/desktop/install/ubuntu/
-
-A nainstalovat příkazem v terminálu
-```
-sudo apt update
-sudo apt install <cesta ke staženému souboru>
-```
-
-
-Povolení spuštění po startu systému
-```
-sudo systemctl enable docker
-```
+Nainstalovat docker podle návodu (sekce Install using the apt repository)
+https://docs.docker.com/engine/install/ubuntu/
 
 ## Instalace GIT
 
@@ -43,7 +31,7 @@ chmod +x *.sh
 
 # Spuštění aplikace
 
-Aplikace se spouští pomocí `start.sh` v adresáři aplikace.
+Aplikace se spouští pomocí `./start.sh` v adresáři aplikace.
 
 *První spuštění chvíli potrvá (v závislosti na rychlosti internetu), protože se musí stáhnout všechny potřebné součásti.*
 
@@ -52,13 +40,13 @@ http://localhost:8080
 
 Pokud byla aplikace už jednou spuštněna a docker je nastaven po spuštění systému, tak se automaticky zapne s přihlášením uživatele.
 
-Na plochu Ubuntu lze přidat zástupce jednorázovým spuštěním skriptu `create-shortcut.sh`.
+Na plochu Ubuntu lze přidat zástupce jednorázovým spuštěním skriptu `./create-shortcut.sh`.
 
-Případné vypnutí je pomocí  `stop.sh`.
+Případné vypnutí je pomocí  `./stop.sh`.
 
 # Konfigurace aplikace
 
-Prvotní konfigurace probíha při spuštění aplikace pomocí `start.sh`;
+Prvotní konfigurace probíha při spuštění aplikace pomocí `./start.sh`;
 
 Konfigurace je uložená v souboru `app/config.json`.
 
