@@ -51,3 +51,9 @@ Prvotní konfigurace probíha při spuštění aplikace pomocí `./start.sh`;
 Konfigurace je uložená v souboru `app/config.json`.
 
 Pokud bude potřeba změnit konfiguraci v budoucnu, např. přihlašovací údaje k emailu, tak upravit lze editací tohoto souboru.
+
+# Aktualizace
+
+V příkazové řádce v adresáři s aplikací spustit `./update.sh`
+
+Pozor! Nesmí být upraveny originální zdrojové soubory, jinak se aktualizace nepovede.
